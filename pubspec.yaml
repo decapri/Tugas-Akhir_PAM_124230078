@@ -1,0 +1,45 @@
+name: proyek_akhir_app
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  crypto: ^3.0.3
+  path_provider: ^2.1.2
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.0
+  geolocator: ^14.0.2
+  http: ^1.1.0
+  url_launcher: ^6.3.0
+  image_picker: ^1.0.4
+  intl: ^0.20.2
+  shared_preferences: ^2.2.3
+  flutter_local_notifications: 19.5.0
+  timezone: 0.10.1
+
+dependency_overrides:
+  shared_preferences_android: 2.3.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/logo.png
+    - assets/darah.png
+    - assets/Edit.png
+    - assets/delete.png
