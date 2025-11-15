@@ -10,7 +10,7 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _notifications =
       FlutterLocalNotificationsPlugin();
 
-  // 🔹 Inisialisasi Notifikasi
+  
   Future<void> initialize() async {
     tz.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
@@ -44,7 +44,6 @@ class NotificationService {
         ?.requestNotificationsPermission();
   }
 
-  // 🔔 Notifikasi langsung (muncul saat itu juga)
   Future<void> showInstantNotification({
     required int id,
     required String title,
@@ -74,7 +73,6 @@ class NotificationService {
     await _notifications.show(id, title, body, details, payload: payload);
   }
 
-  // ⏰ Notifikasi terjadwal satu kali
   Future<void> scheduleNotification({
     required int id,
     required String title,
@@ -82,7 +80,7 @@ class NotificationService {
     required DateTime scheduledDate,
     String? payload,
   }) async {
-    if (scheduledDate.isBefore(DateTime.now())) return; // hindari waktu lampau
+    if (scheduledDate.isBefore(DateTime.now())) return; 
 
     const androidDetails = AndroidNotificationDetails(
       'scheduled_channel',
@@ -115,7 +113,7 @@ class NotificationService {
     );
   }
 
-  // 🔁 Notifikasi harian berulang (jam tetap tiap hari)
+ 
   Future<void> scheduleDailyNotification({
     required int id,
     required String title,
@@ -158,12 +156,12 @@ class NotificationService {
     return scheduledDate;
   }
 
-  // ❌ Cancel satu notifikasi
+
   Future<void> cancelNotification(int id) async {
     await _notifications.cancel(id);
   }
 
-  // ❌ Cancel semua notifikasi
+ 
   Future<void> cancelAllNotifications() async {
     await _notifications.cancelAll();
   }
@@ -172,9 +170,7 @@ class NotificationService {
     return await _notifications.pendingNotificationRequests();
   }
 
-  // ========== FITUR BLOODON APP ========== //
 
-  // 🩸 Reminder haid akan datang (3 hari sebelum)
   Future<void> scheduleNextPeriodReminder(DateTime nextPeriodDate) async {
     final reminderDate = nextPeriodDate.subtract(const Duration(days: 3));
     await scheduleNotification(
@@ -185,7 +181,7 @@ class NotificationService {
     );
   }
 
-  // 🩸 Hari pertama haid
+
   Future<void> scheduleFirstDayPeriodReminder(DateTime firstDayDate) async {
     await scheduleNotification(
       id: 101,
@@ -195,7 +191,6 @@ class NotificationService {
     );
   }
 
-  // 💉 Reminder donor darah
   Future<void> scheduleCanDonateReminder(DateTime canDonateDate) async {
     await scheduleNotification(
       id: 200,
@@ -205,7 +200,7 @@ class NotificationService {
     );
   }
 
-  // 💉 Reminder donor 3 hari lagi
+ 
   Future<void> scheduleDonationReminder(DateTime nextDonationDate) async {
     final reminderDate = nextDonationDate.subtract(const Duration(days: 3));
     await scheduleNotification(
@@ -216,7 +211,7 @@ class NotificationService {
     );
   }
 
-  // ✅ Setelah donor darah
+  
   Future<void> showDonationTrackedNotification() async {
     await showInstantNotification(
       id: 301,
@@ -225,7 +220,7 @@ class NotificationService {
     );
   }
 
-  // 🩸 Setelah input menstruasi
+ 
   Future<void> showPeriodTrackedNotification() async {
     await showInstantNotification(
       id: 300,
@@ -234,7 +229,7 @@ class NotificationService {
     );
   }
 
-  // 💧 Reminder minum air setelah donor (2 jam kemudian)
+  
   Future<void> scheduleDrinkWaterReminder() async {
     final reminderTime = DateTime.now().add(const Duration(hours: 2));
 
@@ -246,7 +241,7 @@ class NotificationService {
     );
   }
 
-  // ❌ Cancel reminder haid & donor
+ 
   Future<void> cancelPeriodReminders() async {
     await cancelNotification(100);
     await cancelNotification(101);
@@ -260,12 +255,12 @@ class NotificationService {
     await cancelNotification(201);
   }
 
-  // 🩸 Jadwal notifikasi setiap hari selama masa haid
+
   Future<void> scheduleDailyPeriodNotifications({
     required DateTime startDate,
     required int durationDays,
   }) async {
-    // Batalkan dulu reminder haid sebelumnya
+  
     for (int i = 400; i <= 500; i++) {
       await cancelNotification(i);
     }
@@ -285,7 +280,7 @@ class NotificationService {
       );
     }
 
-    // 🔚 Notifikasi penutup di akhir
+
     final endDate = startDate.add(Duration(days: durationDays, hours: 8));
     await scheduleNotification(
       id: 500,

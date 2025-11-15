@@ -4,15 +4,15 @@ import 'package:http/http.dart' as http;
 class CurrencyService {
   static const String baseUrl = 'https://api.exchangerate-api.com/v4/latest/USD';
   
-  // Cache untuk rates
+  
   static Map<String, double>? _cachedRates;
   static DateTime? _lastFetch;
   
-  // Reward per donor dalam USD
+ 
   static const double rewardPerDonation = 7.0;
   
   static Future<Map<String, double>> getExchangeRates() async {
-    // Cache valid untuk 1 jam
+  
     if (_cachedRates != null && 
         _lastFetch != null && 
         DateTime.now().difference(_lastFetch!).inHours < 1) {
@@ -45,7 +45,7 @@ class CurrencyService {
   }
   
   static Map<String, double> _getDefaultRates() {
-    // Fallback rates jika API gagal
+    
     return {
       'USD': 1.0,
       'GBP': 0.79,

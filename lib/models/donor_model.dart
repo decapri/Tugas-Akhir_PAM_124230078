@@ -2,7 +2,7 @@ class DonationRecord {
   final int? id;
   final int userId;
   final DateTime donationDate;
-  final String timezone; // WIB, WITA, WIT, London
+  final String timezone; 
   final String location;
   final String? notes;
   final DateTime createdAt;
@@ -17,16 +17,16 @@ class DonationRecord {
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
-  // Donor berikutnya bisa dilakukan 2 bulan (60 hari) setelah donor
+
   DateTime get nextDonationDate => donationDate.add(const Duration(days: 60));
 
-  // Cek apakah sudah boleh donor lagi
+
   bool canDonateAgain(DateTime date) {
     return date.isAfter(nextDonationDate) || 
            date.isAtSameMomentAs(nextDonationDate);
   }
 
-  // Hitung berapa hari lagi bisa donor
+
   int daysUntilNextDonation() {
     final now = DateTime.now();
     if (canDonateAgain(now)) return 0;

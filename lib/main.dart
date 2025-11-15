@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         useMaterial3: true,
       ),
-      home: const SplashPage(), // Start with splash
+      home: const SplashPage(), 
     );
   }
 }

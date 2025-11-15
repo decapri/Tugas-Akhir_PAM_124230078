@@ -42,7 +42,7 @@ appBar: AppBar(
             children: [
               const SizedBox(height: 20),
               
-              // Main Card
+              
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(32),
@@ -61,7 +61,7 @@ appBar: AppBar(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nama
+                    
                     const Text(
                       'Destiana Bunga Amelia',
                       style: TextStyle(
@@ -71,7 +71,7 @@ appBar: AppBar(
                       ),
                     ),
                     
-                    // NIM
+                    
                     const Text(
                       '124230078',
                       style: TextStyle(
@@ -81,7 +81,7 @@ appBar: AppBar(
                       ),
                     ),
                     
-                    // Kelas
+                    
                     const Text(
                       'SI-A',
                       style: TextStyle(
@@ -91,12 +91,12 @@ appBar: AppBar(
                       ),
                     ),
                     const Divider(
-                      color: Colors.white, // Warna garis
-                      thickness: 1,       // Ketebalan garis
+                      color: Colors.white, 
+                      thickness: 1,       
                     ),
                     const SizedBox(height: 40),
                     
-                    // Saran Section
+                    
                     const Center(
                       child: Text(
                         'SARAN:',
@@ -143,7 +143,7 @@ appBar: AppBar(
                     
                     const SizedBox(height: 40),
                     
-                    // Kesan Section
+                    
                     const Center(
                       child: Text(
                         'KESAN:',

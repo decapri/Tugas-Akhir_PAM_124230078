@@ -8,11 +8,7 @@ class AddMenstrualPage extends StatefulWidget {
   final int userId;
   final DateTime? initialDate;
 
-  const AddMenstrualPage({
-    super.key,
-    required this.userId,
-    this.initialDate,
-  });
+  const AddMenstrualPage({super.key, required this.userId, this.initialDate});
 
   @override
   State<AddMenstrualPage> createState() => _AddMenstrualPageState();
@@ -38,9 +34,7 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFFD32F2F),
-            ),
+            colorScheme: const ColorScheme.light(primary: Color(0xFFD32F2F)),
           ),
           child: child!,
         );
@@ -53,53 +47,47 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
   }
 
   Future<void> _save() async {
-  if (_duration < 1) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Durasi haid minimal 1 hari')),
-    );
-    return;
-  }
+    if (_duration < 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Durasi haid minimal 1 hari')),
+      );
+      return;
+    }
 
-  setState(() => _isLoading = true);
+    setState(() => _isLoading = true);
 
-  final record = MenstrualRecord(
-    userId: widget.userId,
-    startDate: _selectedDate,
-    duration: _duration,
-  );
-
-  // Simpan ke database
-  final result = await DatabaseHelper.instance.addMenstrualRecord(record);
-
-  if (result > 0) {
-    // === ✨ Kirim semua notifikasi yang relevan ===
-    final notifService = NotificationService();
-
-    // Notifikasi langsung bahwa data tersimpan
-    await notifService.showPeriodTrackedNotification();
-
-    // Prediksi haid berikutnya (28 hari dari tanggal mulai)
-    final nextDate = _selectedDate.add(const Duration(days: 28));
-    await notifService.scheduleNextPeriodReminder(nextDate);
-
-    // Jadwalkan notifikasi harian selama masa haid
-    await notifService.scheduleDailyPeriodNotifications(
+    final record = MenstrualRecord(
+      userId: widget.userId,
       startDate: _selectedDate,
-      durationDays: _duration,
+      duration: _duration,
     );
 
-    if (!context.mounted) return;
-    setState(() => _isLoading = false);
+    final result = await DatabaseHelper.instance.addMenstrualRecord(record);
 
-    Navigator.pop(context, true);
-  } else {
-    setState(() => _isLoading = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Gagal menyimpan data')),
-    );
+    if (result > 0) {
+      final notifService = NotificationService();
+
+      await notifService.showPeriodTrackedNotification();
+
+      final nextDate = _selectedDate.add(const Duration(days: 28));
+      await notifService.scheduleNextPeriodReminder(nextDate);
+
+      await notifService.scheduleDailyPeriodNotifications(
+        startDate: _selectedDate,
+        durationDays: _duration,
+      );
+
+      if (!context.mounted) return;
+      setState(() => _isLoading = false);
+
+      Navigator.pop(context, true);
+    } else {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Gagal menyimpan data')));
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -130,10 +118,7 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
 
                   const Text(
                     'Riwayat Haid',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 32),
@@ -167,17 +152,16 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                  color: Colors.grey[400]!,
-                                ),
+                                border: Border.all(color: Colors.grey[400]!),
                               ),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    DateFormat('MM/dd/yyyy')
-                                        .format(_selectedDate),
+                                    DateFormat(
+                                      'MM/dd/yyyy',
+                                    ).format(_selectedDate),
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                   const Icon(Icons.calendar_today),
@@ -197,14 +181,11 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
                           ),
                           const SizedBox(height: 12),
                           Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(30),
-                              border: Border.all(
-                                color: Colors.grey[400]!,
-                              ),
+                              border: Border.all(color: Colors.grey[400]!),
                             ),
                             child: Row(
                               children: [
@@ -262,8 +243,12 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
                             child: ElevatedButton(
                               onPressed: _isLoading ? null : _save,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 255, 139, 151),
+                                backgroundColor: const Color.fromARGB(
+                                  255,
+                                  255,
+                                  139,
+                                  151,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
@@ -271,7 +256,8 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
                               ),
                               child: _isLoading
                                   ? const CircularProgressIndicator(
-                                      color: Colors.black)
+                                      color: Colors.black,
+                                    )
                                   : const Text(
                                       'Simpan',
                                       style: TextStyle(
@@ -290,7 +276,6 @@ class _AddMenstrualPageState extends State<AddMenstrualPage> {
               ),
             ),
 
-            // Tombol close
             Positioned(
               top: 16,
               right: 16,

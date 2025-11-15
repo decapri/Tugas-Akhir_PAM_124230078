@@ -33,15 +33,17 @@ class _ProfilePageState extends State<ProfilePage> {
     _loadProfileImage();
   }
 
-  // Load foto dari path tersimpan di database atau SharedPrefs
+ 
   void _loadProfileImage() async {
-    // ⬅️ DITAMBAH: fallback ke SharedPrefs kalau data di DB kosong
-    if (_currentUser.foto == null || _currentUser.foto!.isEmpty) {
       final savedPath = await SharedPrefsService().getPhotoPath();
-      if (savedPath != null && savedPath.isNotEmpty) {
+  final savedUserId = await SharedPrefsService().getUserId();
+    
+    if (_currentUser.id == savedUserId &&
+      savedPath != null &&
+      savedPath.isNotEmpty){
         _currentUser = _currentUser.copyWith(foto: savedPath);
       }
-    }
+    
 
     if (_currentUser.foto != null && _currentUser.foto!.isNotEmpty) {
       final file = File(_currentUser.foto!);
@@ -63,19 +65,18 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
       if (pickedFile != null) {
-        // Save foto ke permanent directory
+      
         final savedPath = await _saveImagePermanently(pickedFile.path);
         
-        // Update database
+
         await DatabaseHelper.instance.updateUserPhoto(
           _currentUser.id!,
           savedPath,
         );
 
-        // Update SharedPreferences
         await SharedPrefsService().savePhotoPath(savedPath);
 
-        // ⬅️ DITAMBAH: update semua data user ke SharedPrefs
+       
         await SharedPrefsService().saveLoginData(
           userId: _currentUser.id!,
           username: _currentUser.username,
@@ -83,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
           photoPath: savedPath,
         );
 
-        // Update state
+       
         setState(() {
           _profileImage = File(savedPath);
           _currentUser = _currentUser.copyWith(foto: savedPath);
@@ -109,7 +110,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  // Save foto ke direktori aplikasi (permanen)
+
   Future<String> _saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final fileName = 'profile_${_currentUser.id}_${DateTime.now().millisecondsSinceEpoch}${path.extension(imagePath)}';
@@ -157,7 +158,6 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               const SizedBox(height: 20),
 
-              // FOTO PROFIL
               Stack(
                 children: [
                   Container(
@@ -233,7 +233,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
               const SizedBox(height: 30),
 
-              // Riwayat Donor
+
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -249,7 +249,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
               const SizedBox(height: 30),
 
-              // Saran & Kesan
+
               InkWell(
                 onTap: () {
                   Navigator.push(
@@ -264,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
               const SizedBox(height: 30),
 
-              // Logout
+          
               SizedBox(
                 width: 250,
                 child: ElevatedButton(

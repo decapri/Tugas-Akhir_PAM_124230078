@@ -25,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  // ✅ Fungsi login + simpan session ke SharedPreferences
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -39,22 +38,19 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _isLoading = false);
 
     if (user != null) {
-      // ✅ Simpan data user ke SharedPrefsService (termasuk foto)
       await SharedPrefsService().saveLoginData(
         userId: user.id!,
         username: user.username,
         email: user.email ?? '',
-        photoPath: user.foto, // 🩸 foto disimpan biar gak ilang pas buka app lagi
+        photoPath: user.foto,
       );
 
-      // 🔽 Tambahan aman — update foto path kalau user ganti profil nanti
       if (user.foto != null && user.foto!.isNotEmpty) {
         await SharedPrefsService().savePhotoPath(user.foto!);
       }
 
       _showMessage('Login berhasil!');
 
-      // ✅ Navigasi ke HomePage
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage(user: user)),
@@ -65,9 +61,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -95,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 40),
 
-                // Logo
                 Center(
                   child: Column(
                     children: [
@@ -110,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                // Username Field
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -167,7 +161,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
 
-                // Password Field
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -238,7 +231,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 20),
 
-                // Login Button
                 SizedBox(
                   width: double.infinity,
                   height: 55,
@@ -266,7 +258,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 20),
 
-                // Register Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

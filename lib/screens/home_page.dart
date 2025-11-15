@@ -40,14 +40,13 @@ class _HomePageState extends State<HomePage> {
     setState(() => _isLoading = false);
   }
 
-  // Cek apakah tanggal adalah masa haid
+ 
   bool _isInPeriod(DateTime date) {
     if (_latestMenstrual == null) return false;
     
-    // Cek periode saat ini
+ 
     if (_latestMenstrual!.isInPeriod(date)) return true;
-    
-    // Cek prediksi periode berikutnya (28 hari)
+ 
     final nextPeriodStart = _latestMenstrual!.nextPeriodDate;
     final nextPeriodEnd = nextPeriodStart.add(Duration(days: _latestMenstrual!.duration - 1));
     
@@ -60,18 +59,15 @@ class _HomePageState extends State<HomePage> {
            (dateOnly.isAfter(nextStartOnly) && dateOnly.isBefore(nextEndOnly));
   }
 
-  // Cek apakah tanggal bisa untuk donor
   bool _canDonateOnDate(DateTime date) {
     if (_latestMenstrual == null) return false;
     
-    // Tidak bisa donor saat haid
     if (_isInPeriod(date)) return false;
     
-    // Harus 10 hari setelah haid selesai
     final lastPeriodEnd = _latestMenstrual!.endDate;
     final canDonateAfterPeriod = lastPeriodEnd.add(const Duration(days: 10));
     
-    // Jika ada riwayat donor, harus 60 hari setelah donor terakhir
+
     if (_latestDonation != null) {
       final canDonateAfterLastDonation = _latestDonation!.nextDonationDate;
       return date.isAfter(canDonateAfterPeriod) && 
@@ -95,7 +91,7 @@ class _HomePageState extends State<HomePage> {
     final lastPeriodEnd = _latestMenstrual!.endDate;
     final canDonateDate = lastPeriodEnd.add(const Duration(days: 10));
     
-    // Jika ada riwayat donor
+
     if (_latestDonation != null) {
       final canDonateAfterDonation = _latestDonation!.nextDonationDate;
       final latestDate = canDonateDate.isAfter(canDonateAfterDonation) 
@@ -166,7 +162,7 @@ class _HomePageState extends State<HomePage> {
 
                       Image.asset(
                         'assets/logo.png',
-                        width: 50, // ubah sesuai kebutuhan, misalnya 120
+                        width: 50, 
                         height: 50,  
                         fit: BoxFit.contain,
                       ),
@@ -272,8 +268,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Image.asset(
                         'assets/darah.png',
-                        width: 30, // ubah sesuai kebutuhan, misalnya 120
-                        height: 30, // pastikan path sesuai dengan di pubspec.yaml
+                        width: 30, 
+                        height: 30, 
                         fit: BoxFit.contain,
                       ),
                     ],
@@ -301,7 +297,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 12),
-          // Card DONOR - clickable
+          
                    InkWell(
             onTap: () async {
               await Navigator.push(
@@ -490,7 +486,7 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 8),
         
-        // Grid tanggal
+      
         ...List.generate((daysInMonth + startingWeekday - 1) ~/ 7 + 1, (weekIndex) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -512,7 +508,7 @@ class _HomePageState extends State<HomePage> {
 
                 return GestureDetector(
                   onTap: () async {
-                    // Tampilkan dialog untuk set sebagai hari pertama haid
+                 
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
@@ -632,7 +628,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () {
         if (index == 1) {
-          // Profile
+         
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -640,7 +636,7 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else if (index == 2) {
-          // Map
+         
           Navigator.push(
             context,
             MaterialPageRoute(

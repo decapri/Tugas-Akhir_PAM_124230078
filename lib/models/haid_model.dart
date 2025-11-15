@@ -2,7 +2,7 @@ class MenstrualRecord {
   final int? id;
   final int userId;
   final DateTime startDate;
-  final int duration; // dalam hari
+  final int duration; 
   final DateTime createdAt;
 
   MenstrualRecord({
@@ -13,13 +13,13 @@ class MenstrualRecord {
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
 
-  // Hitung tanggal selesai haid
+ 
   DateTime get endDate => startDate.add(Duration(days: duration - 1));
 
-  // Prediksi haid berikutnya (28 hari dari tanggal pertama)
+
   DateTime get nextPeriodDate => startDate.add(const Duration(days: 28));
 
-  // Cek apakah tanggal tertentu adalah masa haid
+ 
   bool isInPeriod(DateTime date) {
     final dateOnly = DateTime(date.year, date.month, date.day);
     final startOnly = DateTime(startDate.year, startDate.month, startDate.day);

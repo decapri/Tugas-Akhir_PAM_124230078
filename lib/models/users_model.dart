@@ -5,7 +5,7 @@ class User {
   final String password;
   final String? foto;
 
-  // Constructor
+
   User({
     this.id,
     required this.email,
@@ -14,7 +14,6 @@ class User {
     this.foto,
   });
 
-  // Konversi dari Map ke User object (untuk membaca dari database)
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['id'] as int?,
@@ -25,7 +24,6 @@ class User {
     );
   }
 
-  // Konversi dari User object ke Map (untuk menyimpan ke database)
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -36,7 +34,7 @@ class User {
     };
   }
 
-  // Copy dengan perubahan tertentu (optional, tapi sangat berguna)
+ 
   User copyWith({
     int? id,
     String? email,
@@ -53,13 +51,12 @@ class User {
     );
   }
 
-  // Override toString untuk debugging
+
   @override
   String toString() {
     return 'User{id: $id, email: $email, username: $username, foto: $foto}';
   }
 
-  // Override equality operator (optional tapi berguna)
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

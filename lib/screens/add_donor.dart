@@ -4,16 +4,11 @@ import 'package:proyek_akhir_app/models/donor_model.dart';
 import 'package:proyek_akhir_app/services/database.dart';
 import 'package:proyek_akhir_app/services/notifikasi_service.dart';
 
-
 class AddDonationPage extends StatefulWidget {
   final int userId;
-  final DonationRecord? donation; // Null jika tambah baru, ada value jika edit
+  final DonationRecord? donation;
 
-  const AddDonationPage({
-    super.key,
-    required this.userId,
-    this.donation,
-  });
+  const AddDonationPage({super.key, required this.userId, this.donation});
 
   @override
   State<AddDonationPage> createState() => _AddDonationPageState();
@@ -30,16 +25,14 @@ class _AddDonationPageState extends State<AddDonationPage> {
   @override
   void initState() {
     super.initState();
-    
+
     if (widget.donation != null) {
-      // Mode edit
       _selectedDate = widget.donation!.donationDate;
       _selectedTime = TimeOfDay.fromDateTime(widget.donation!.donationDate);
       _selectedTimezone = widget.donation!.timezone;
       _locationController.text = widget.donation!.location;
       _notesController.text = widget.donation!.notes ?? '';
     } else {
-      // Mode tambah baru
       _selectedDate = DateTime.now();
       _selectedTime = TimeOfDay.now();
     }
@@ -61,9 +54,7 @@ class _AddDonationPageState extends State<AddDonationPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFFD32F2F),
-            ),
+            colorScheme: const ColorScheme.light(primary: Color(0xFFD32F2F)),
           ),
           child: child!,
         );
@@ -82,9 +73,7 @@ class _AddDonationPageState extends State<AddDonationPage> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: Color(0xFFD32F2F),
-            ),
+            colorScheme: const ColorScheme.light(primary: Color(0xFFD32F2F)),
           ),
           child: child!,
         );
@@ -115,17 +104,15 @@ class _AddDonationPageState extends State<AddDonationPage> {
     );
 
     if (widget.donation != null) {
-      // Update
       final updated = widget.donation!.copyWith(
         donationDate: donationDateTime,
         timezone: _selectedTimezone,
         location: _locationController.text,
         notes: _notesController.text.isEmpty ? null : _notesController.text,
       );
-      
+
       await DatabaseHelper.instance.updateDonationRecord(updated);
     } else {
-      // Tambah baru
       final record = DonationRecord(
         userId: widget.userId,
         donationDate: donationDateTime,
@@ -149,7 +136,7 @@ class _AddDonationPageState extends State<AddDonationPage> {
   @override
   Widget build(BuildContext context) {
     final isEdit = widget.donation != null;
-    
+
     return Scaffold(
       backgroundColor: Colors.grey[100],
       body: SafeArea(
@@ -159,23 +146,21 @@ class _AddDonationPageState extends State<AddDonationPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 40),
-                  
-                  // Logo
-                                  Center(
-  child: Column(
-    children: [
-      // Logo dari asset
-      Image.asset(
-        'assets/logo.png', // pastikan path sesuai dengan di pubspec.yaml
-        width: 120,
-        height: 120,
-        fit: BoxFit.contain,
-      ),
-      const SizedBox(height: 60),
-    ],
-  ),
-),
-                  
+
+                  Center(
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/logo.png', // pastikan path sesuai dengan di pubspec.yaml
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.contain,
+                        ),
+                        const SizedBox(height: 60),
+                      ],
+                    ),
+                  ),
+
                   Text(
                     isEdit ? 'Update Data' : 'Tambah Riwayat\nDonor Darah',
                     textAlign: TextAlign.center,
@@ -184,10 +169,9 @@ class _AddDonationPageState extends State<AddDonationPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
-                  // Form
+
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Container(
@@ -199,7 +183,6 @@ class _AddDonationPageState extends State<AddDonationPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Tanggal
                           const Text(
                             'Tanggal :',
                             style: TextStyle(
@@ -218,15 +201,16 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(30),
-                                border: Border.all(
-                                  color: Colors.grey[400]!,
-                                ),
+                                border: Border.all(color: Colors.grey[400]!),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    DateFormat('MM/dd/yyyy').format(_selectedDate),
+                                    DateFormat(
+                                      'MM/dd/yyyy',
+                                    ).format(_selectedDate),
                                     style: const TextStyle(fontSize: 16),
                                   ),
                                   const Icon(Icons.calendar_today),
@@ -234,10 +218,9 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 24),
-                          
-                          // Waktu
+
                           const Text(
                             'Waktu:',
                             style: TextStyle(
@@ -248,20 +231,26 @@ class _AddDonationPageState extends State<AddDonationPage> {
                           const SizedBox(height: 12),
                           Row(
                             children: [
-                              // Hour
                               Expanded(
                                 child: InkWell(
                                   onTap: _selectTime,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(color: Colors.grey[400]!),
+                                      border: Border.all(
+                                        color: Colors.grey[400]!,
+                                      ),
                                     ),
                                     child: Center(
                                       child: Text(
-                                        _selectedTime.hour.toString().padLeft(2, '0'),
+                                        _selectedTime.hour.toString().padLeft(
+                                          2,
+                                          '0',
+                                        ),
                                         style: const TextStyle(fontSize: 16),
                                       ),
                                     ),
@@ -270,22 +259,35 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               ),
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(':', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                child: Text(
+                                  ':',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                              // Minute
+
                               Expanded(
                                 child: InkWell(
                                   onTap: _selectTime,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(color: Colors.grey[400]!),
+                                      border: Border.all(
+                                        color: Colors.grey[400]!,
+                                      ),
                                     ),
                                     child: Center(
                                       child: Text(
-                                        _selectedTime.minute.toString().padLeft(2, '0'),
+                                        _selectedTime.minute.toString().padLeft(
+                                          2,
+                                          '0',
+                                        ),
                                         style: const TextStyle(fontSize: 16),
                                       ),
                                     ),
@@ -293,9 +295,11 @@ class _AddDonationPageState extends State<AddDonationPage> {
                                 ),
                               ),
                               const SizedBox(width: 12),
-                              // Timezone
+
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(30),
@@ -305,10 +309,12 @@ class _AddDonationPageState extends State<AddDonationPage> {
                                   value: _selectedTimezone,
                                   underline: Container(),
                                   items: ['WIB', 'WITA', 'WIT', 'London']
-                                      .map((tz) => DropdownMenuItem(
-                                            value: tz,
-                                            child: Text(tz),
-                                          ))
+                                      .map(
+                                        (tz) => DropdownMenuItem(
+                                          value: tz,
+                                          child: Text(tz),
+                                        ),
+                                      )
                                       .toList(),
                                   onChanged: (value) {
                                     if (value != null) {
@@ -319,10 +325,9 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               ),
                             ],
                           ),
-                          
+
                           const SizedBox(height: 24),
-                          
-                          // Lokasi
+
                           const Text(
                             'Lokasi :',
                             style: TextStyle(
@@ -340,11 +345,15 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide(color: Colors.grey[400]!),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[400]!,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide(color: Colors.grey[400]!),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[400]!,
+                                ),
                               ),
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
@@ -352,10 +361,9 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 24),
-                          
-                          // Keluhan
+
                           const Text(
                             'Keluhan :',
                             style: TextStyle(
@@ -374,11 +382,15 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey[400]!),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[400]!,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: Colors.grey[400]!),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[400]!,
+                                ),
                               ),
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 20,
@@ -386,24 +398,30 @@ class _AddDonationPageState extends State<AddDonationPage> {
                               ),
                             ),
                           ),
-                          
+
                           const SizedBox(height: 40),
-                          
-                          // Button
+
                           SizedBox(
                             width: double.infinity,
                             height: 55,
                             child: ElevatedButton(
                               onPressed: _isLoading ? null : _save,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromARGB(255, 255, 139, 151),
+                                backgroundColor: const Color.fromARGB(
+                                  255,
+                                  255,
+                                  139,
+                                  151,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                                 elevation: 2,
                               ),
                               child: _isLoading
-                                  ? const CircularProgressIndicator(color: Colors.black)
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.black,
+                                    )
                                   : Text(
                                       isEdit ? 'Update' : 'Tambah',
                                       style: const TextStyle(
@@ -421,10 +439,121 @@ class _AddDonationPageState extends State<AddDonationPage> {
                 ],
               ),
             ),
-            
-    
 
-            // Close button
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             Positioned(
               top: 16,
               right: 16,

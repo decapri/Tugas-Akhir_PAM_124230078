@@ -3,7 +3,8 @@ import 'package:proyek_akhir_app/auth/login_page.dart';
 import 'package:proyek_akhir_app/screens/home_page.dart';
 import 'dart:async';
 import 'package:proyek_akhir_app/models/users_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:proyek_akhir_app/services/login_saved.dart';
+
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -21,9 +22,9 @@ class _SplashPageState extends State<SplashPage>
   @override
   void initState() {
     super.initState();
-    _checkSession(); // ✅ Cek session login
+    _checkSession(); 
 
-    // Setup animasi splash
+   
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
@@ -40,42 +41,34 @@ class _SplashPageState extends State<SplashPage>
     _controller.forward();
   }
 
-  /// ✅ Cek apakah user sudah login atau belum
+
   Future<void> _checkSession() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  final userData = await SharedPrefsService().getUserData();
 
-    // Ambil data user yang tersimpan (kalau ada)
-    final username = prefs.getString('username');
-    final userId = prefs.getInt('userId');
+  Timer(const Duration(seconds: 3), () {
+    if (!mounted) return;
 
-    // 🔽 Tambahan komentar: bisa juga ambil email kalau kamu simpan nanti di login
-    // final email = prefs.getString('email');
+    if (userData != null) {
+      final user = User(
+        id: userData['userId'],
+        username: userData['username'],
+        email: userData['email'] ?? '',
+        password: '',
+      );
 
-    Timer(const Duration(seconds: 3), () {
-      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => HomePage(user: user)),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginPage()),
+      );
+    }
+  });
+}
 
-      if (isLoggedIn && username != null && userId != null) {
-        // ✅ Buat instance user dari data yang disimpan
-        final user = User(
-          id: userId,
-          email: '', // email bisa dikosongkan kalau tidak disimpan
-          username: username,
-          password: '', // password tidak disimpan di session
-        );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => HomePage(user: user)),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-        );
-      }
-    });
-  }
 
   @override
   void dispose() {

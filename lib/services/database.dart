@@ -30,7 +30,6 @@ class DatabaseHelper {
   }
 
   Future _createDB(Database db, int version) async {
-    // Tabel users
     await db.execute('''
       CREATE TABLE users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,7 +40,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // Tabel menstrual_records (riwayat haid)
+    
     await db.execute('''
       CREATE TABLE menstrual_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,7 +52,6 @@ class DatabaseHelper {
       )
     ''');
 
-    // Tabel donation_records (riwayat donor)
     await db.execute('''
       CREATE TABLE donation_records (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -68,19 +66,19 @@ class DatabaseHelper {
     ''');
   }
 
-  // Fungsi untuk enkripsi password dengan MD5
+  // (enkripsi MD5)
   String encryptPassword(String password) {
     var bytes = utf8.encode(password);
     var digest = md5.convert(bytes);
     return digest.toString();
   }
 
-  // Registrasi user baru (menggunakan User model)
+  
   Future<int> registerUser(User user) async {
     final db = await database;
     
     try {
-      // Enkripsi password sebelum disimpan
+      
       final userWithEncryptedPassword = user.copyWith(
         password: encryptPassword(user.password),
       );
@@ -93,7 +91,7 @@ class DatabaseHelper {
     }
   }
 
-  // Login user (return User object atau null)
+ 
   Future<User?> loginUser({
     required String username,
     required String password,
@@ -112,7 +110,7 @@ class DatabaseHelper {
     return null;
   }
 
-  // Cek apakah username sudah ada
+ 
   Future<bool> isUsernameExists(String username) async {
     final db = await database;
     final result = await db.query(
@@ -123,7 +121,6 @@ class DatabaseHelper {
     return result.isNotEmpty;
   }
 
-  // Cek apakah email sudah ada
   Future<bool> isEmailExists(String email) async {
     final db = await database;
     final result = await db.query(
@@ -134,7 +131,7 @@ class DatabaseHelper {
     return result.isNotEmpty;
   }
 
-  // Get user by ID (tambahan, berguna untuk fitur profile)
+
   Future<User?> getUserById(int id) async {
     final db = await database;
     final result = await db.query(
@@ -149,7 +146,7 @@ class DatabaseHelper {
     return null;
   }
 
-  // Get user by username (tambahan)
+
   Future<User?> getUserByUsername(String username) async {
     final db = await database;
     final result = await db.query(
@@ -164,7 +161,7 @@ class DatabaseHelper {
     return null;
   }
 
-  // Update user (untuk fitur edit profile nanti)
+
   Future<int> updateUser(User user) async {
     final db = await database;
     
@@ -176,7 +173,7 @@ class DatabaseHelper {
     );
   }
 
-  // Delete user (jika diperlukan)
+
   Future<int> deleteUser(int id) async {
     final db = await database;
     
@@ -187,7 +184,7 @@ class DatabaseHelper {
     );
   }
 
-  // Get all users (untuk admin atau debugging)
+  
   Future<List<User>> getAllUsers() async {
     final db = await database;
     final result = await db.query('users');
@@ -195,7 +192,7 @@ class DatabaseHelper {
     return result.map((map) => User.fromMap(map)).toList();
   }
 
-  // Update foto user
+
   Future<int> updateUserPhoto(int userId, String photoPath) async {
     final db = await database;
     
@@ -207,7 +204,7 @@ class DatabaseHelper {
     );
   }
 
-  // Get user dengan foto
+
   Future<User?> getUserWithPhoto(int userId) async {
     final db = await database;
     final result = await db.query(
@@ -227,15 +224,13 @@ class DatabaseHelper {
     db.close();
   }
 
-  // ==================== MENSTRUAL RECORDS ====================
-  
-  // Tambah riwayat haid
+
   Future<int> addMenstrualRecord(MenstrualRecord record) async {
     final db = await database;
     return await db.insert('menstrual_records', record.toMap());
   }
 
-  // Get riwayat haid terbaru user
+
   Future<MenstrualRecord?> getLatestMenstrualRecord(int userId) async {
     final db = await database;
     final result = await db.query(
@@ -252,7 +247,7 @@ class DatabaseHelper {
     return null;
   }
 
-  // Get semua riwayat haid user
+
   Future<List<MenstrualRecord>> getMenstrualRecords(int userId) async {
     final db = await database;
     final result = await db.query(
@@ -265,7 +260,7 @@ class DatabaseHelper {
     return result.map((map) => MenstrualRecord.fromMap(map)).toList();
   }
 
-  // Update riwayat haid
+  
   Future<int> updateMenstrualRecord(MenstrualRecord record) async {
     final db = await database;
     return await db.update(
@@ -276,7 +271,7 @@ class DatabaseHelper {
     );
   }
 
-  // Delete riwayat haid
+ 
   Future<int> deleteMenstrualRecord(int id) async {
     final db = await database;
     return await db.delete(
@@ -286,15 +281,13 @@ class DatabaseHelper {
     );
   }
 
-  // ==================== DONATION RECORDS ====================
-  
-  // Tambah riwayat donor
+
   Future<int> addDonationRecord(DonationRecord record) async {
     final db = await database;
     return await db.insert('donation_records', record.toMap());
   }
 
-  // Get riwayat donor terbaru user
+  
   Future<DonationRecord?> getLatestDonationRecord(int userId) async {
     final db = await database;
     final result = await db.query(
@@ -311,7 +304,7 @@ class DatabaseHelper {
     return null;
   }
 
-  // Get semua riwayat donor user
+
   Future<List<DonationRecord>> getDonationRecords(int userId) async {
     final db = await database;
     final result = await db.query(
@@ -324,7 +317,7 @@ class DatabaseHelper {
     return result.map((map) => DonationRecord.fromMap(map)).toList();
   }
 
-  // Update riwayat donor
+
   Future<int> updateDonationRecord(DonationRecord record) async {
     final db = await database;
     return await db.update(
@@ -335,7 +328,7 @@ class DatabaseHelper {
     );
   }
 
-  // Delete riwayat donor
+
   Future<int> deleteDonationRecord(int id) async {
     final db = await database;
     return await db.delete(

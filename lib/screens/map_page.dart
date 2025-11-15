@@ -20,7 +20,7 @@ class _MapPageState extends State<MapPage> {
   List<DonationPlace> _nearbyPlaces = [];
   String _searchQuery = '';
 
-  // Geoapify API Key
+
   final String _apiKey = '746216caf23943e8bf53c841b0e3098a';
   final int _radiusMeters = 10000; // 10 km
 
@@ -37,7 +37,7 @@ class _MapPageState extends State<MapPage> {
     });
 
     try {
-      // Cek permission
+
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
@@ -58,12 +58,12 @@ class _MapPageState extends State<MapPage> {
         return;
       }
 
-      // Dapatkan posisi saat ini
+    
       _currentPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
 
-      // Ambil data dari Geoapify API
+
       await _fetchNearbyPlaces();
     } catch (e) {
       setState(() {
@@ -80,7 +80,7 @@ class _MapPageState extends State<MapPage> {
       final lat = _currentPosition!.latitude;
       final lng = _currentPosition!.longitude;
 
-      // Geoapify API URL dengan multiple categories
+  
       final categories = [
         'healthcare.hospital',
         'healthcare.clinic',
@@ -89,7 +89,7 @@ class _MapPageState extends State<MapPage> {
 
       List<DonationPlace> allPlaces = [];
 
-      // Fetch dari setiap category
+   
       for (String category in categories) {
         final url = Uri.parse(
           'https://api.geoapify.com/v2/places?'
@@ -110,11 +110,11 @@ class _MapPageState extends State<MapPage> {
             final geometry = feature['geometry'] as Map<String, dynamic>;
             final coordinates = geometry['coordinates'] as List;
 
-            // Coordinates format: [lng, lat]
+           
             final placeLng = coordinates[0] as double;
             final placeLat = coordinates[1] as double;
 
-            // Tentukan tipe
+            
             String type = 'Rumah Sakit';
             if (category == 'healthcare.clinic') {
               type = 'Klinik';
@@ -125,10 +125,10 @@ class _MapPageState extends State<MapPage> {
               type = 'PMI';
             }
 
-            // Hitung jarak
+           
             final distance = _calculateDistance(lat, lng, placeLat, placeLng);
 
-            // Build address
+         
             String address = _buildAddress(properties);
 
             allPlaces.add(DonationPlace(
@@ -143,7 +143,7 @@ class _MapPageState extends State<MapPage> {
         }
       }
 
-      // Filter yang ada nama dan unique
+ 
       final uniqueNames = <String>{};
       _nearbyPlaces = allPlaces.where((place) {
         if (place.name == 'Tanpa Nama' || uniqueNames.contains(place.name)) {
@@ -153,7 +153,7 @@ class _MapPageState extends State<MapPage> {
         return true;
       }).toList();
 
-      // Sort by distance
+    
       _nearbyPlaces.sort((a, b) => a.distance!.compareTo(b.distance!));
 
       setState(() {
@@ -168,7 +168,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   String _buildAddress(Map<String, dynamic> properties) {
-    // Try different address fields dari Geoapify
+   
     if (properties['formatted'] != null) {
       return properties['formatted'];
     }
@@ -187,13 +187,13 @@ class _MapPageState extends State<MapPage> {
     return parts.isNotEmpty ? parts.join(', ') : 'Alamat tidak tersedia';
   }
 
-  // Hitung jarak menggunakan Haversine formula (dalam km)
+  
   double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-    const p = 0.017453292519943295; // Math.PI / 180
+    const p = 0.017453292519943295; 
     final a = 0.5 -
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
+    return 12742 * asin(sqrt(a)); 
   }
 
   List<DonationPlace> get _filteredPlaces {
@@ -282,11 +282,11 @@ class _MapPageState extends State<MapPage> {
           ),
           Column(
             children: [
-                      // Logo dari asset
+                      
                       Image.asset(
                         'assets/logo.png', 
                         height: 70,
-                        width: 70,// pastikan path sesuai dengan di pubspec.yaml
+                        width: 70,
                         fit: BoxFit.contain,
                       ),
               const SizedBox(height: 4),
@@ -429,7 +429,7 @@ class _MapPageState extends State<MapPage> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Nomor urutan
+            
             Container(
               width: 32,
               height: 32,
@@ -450,7 +450,7 @@ class _MapPageState extends State<MapPage> {
             ),
             const SizedBox(width: 12),
 
-            // Icon
+           
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -477,7 +477,7 @@ class _MapPageState extends State<MapPage> {
             ),
             const SizedBox(width: 12),
 
-            // Info
+            
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -541,7 +541,7 @@ class _MapPageState extends State<MapPage> {
             ),
             const SizedBox(width: 8),
 
-            // Distance Badge
+          
             if (place.distance != null)
               Container(
                 padding: const EdgeInsets.symmetric(

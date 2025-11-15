@@ -212,7 +212,7 @@ class _DonationHistoryPageState extends State<DonationHistoryPage> {
               ),
             ),
             const SizedBox(width: 16),
-            // Text donor count
+            
             Expanded(
               child: Text(
                 '${_donations.length}x Donor Darah',
@@ -224,7 +224,7 @@ class _DonationHistoryPageState extends State<DonationHistoryPage> {
               ),
             ),
             const SizedBox(width: 8),
-            // Currency section
+           
             FutureBuilder<double>(
               future: CurrencyService.convertFromUSD(_totalReward, _selectedCurrency),
               builder: (context, snapshot) {

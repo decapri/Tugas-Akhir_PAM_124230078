@@ -30,7 +30,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     setState(() => _isLoading = true);
 
-    // Cek apakah email sudah terdaftar
     final emailExists = await DatabaseHelper.instance.isEmailExists(
       _emailController.text,
     );
@@ -40,7 +39,6 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Cek apakah username sudah terdaftar
     final usernameExists = await DatabaseHelper.instance.isUsernameExists(
       _usernameController.text,
     );
@@ -50,14 +48,12 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Buat User object
     final newUser = User(
       email: _emailController.text,
       username: _usernameController.text,
       password: _passwordController.text,
     );
 
-    // Registrasi user
     final result = await DatabaseHelper.instance.registerUser(newUser);
 
     setState(() => _isLoading = false);
@@ -108,13 +104,11 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 40),
 
-                // Logo Blood Drop
                 Center(
                   child: Column(
                     children: [
-                      // Logo dari asset
                       Image.asset(
-                        'assets/logo.png', // pastikan path sesuai dengan di pubspec.yaml
+                        'assets/logo.png',
                         width: 120,
                         height: 120,
                         fit: BoxFit.contain,
@@ -124,7 +118,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
 
-                // Email Field
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -185,7 +178,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Username Field
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -245,7 +237,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 20),
 
-                // Password Field
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -306,7 +297,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 40),
 
-                // Register Button
                 SizedBox(
                   width: double.infinity,
                   height: 55,
